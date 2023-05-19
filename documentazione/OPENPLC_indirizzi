@@ -1,0 +1,50 @@
+OPENPLC - INDIRIZZI
+
+avvio su windows: creare programmi con openplc editor
+
+per lanciare la runtime utilizzare cywin - dal terminale di cywin entrare nella cartella sul Desktop OPENPLC\OpenPLC_v3
+e lanciare ./start_openplc.sh
+
+per collegarsi alla pagina di gestione collegarsi a localhost:8080 ed effettuare il login con openplc - openplc
+qui bisogna caricare il programma.st creato con openplc editor
+e utilizzare la sezione SLAVE DEVICES per collegare un dispositivo e farlo interagire col programma.st
+
+Cliccando su ADD NEW DEVICE si può scegliere il tipo dispositivo (es arduino, o come negli esempi, generic TCP device)
+nella sezione di destra ci sono gli indirizzi di lettura / scrittura
+In Holding Registers Read vado a definire gli indirizzi di lettura modbus, 
+
+ESEMPIO:
+Nel programma .st devo leggere un valore REAL, quindi vado a leggere 2 VALORI UINT e li combino, devo quindi definire 2 variabili utilizzando indirizzi di lettura: %IW100 e %IW101 rispettivamente per la prima word e la seconda word (da combinare insieme in un real)
+in slave device devo quindi dire questi 2 indirizzi di lettura su che indirizzi modbus vanno mappati
+le 2 word stanno nei registri holding in 0 e 1? allora metto START ADDREDS su 0 e SIZE su 2 (LEGGO QUINDI il registro 0 e 1)
+le 2 word stanno nei registri 4-5? metto START ADDRESS su 4 e SIZE 2 (LEGGO 4 e 5)
+
+La stessa logica vale in scrittura, nel file .st dico che voglio scrivere 2 WORD quindi definisco 2 variabili utilizzando gli indirizzi di scrittura %QW100 %QW101
+e nello slave definisco HOLDING REGISTERS - WRITE
+mettendo START ADDRESS 10 SIZE 2
+(nellì’ipotesi che voglia scrivere negli indirizzi modbus 10 e 11) 
+
+NOTA: se voglio leggere più indirizzi:
+esempio nel file.st ho 2 word per un valore e 2 word per un altro valore, quindi avrò %IW100, %IW101, %IW102, %IW103
+se i valori sono consecutivi allora nello slave metto
+START ADDRESS X size 4
+se i valori non sono consecutivi definisco 2 device slave
+uno che legge START ADDRESS X size 2 e un altro START ADDRESS Y size 2
+
+NOTA: se voglio che il PLC esponga dei valori va usato un altro range di indirizzi
+es voglio esporre il risultato di una certa elaborazione, metto quella variabile su indirizzo %MD0
+questa volta SLAVE DEVICE non serve perchè è stesso openplc che fa da SLAVE, quindi il valore messo in MD0 va letto usando un MODBUS MASTER 
+esempio metto il valore 1.0 di una variabile su %MD0
+apro qmodmaster
+metto l’indirizzo dove gira openplc 
+mi collego sull’indirizzo 2048 e avrò il valore:
+indirizzo 2048: 16265
+indirizzo 2049: 0
+che corrispondono ad 1.0
+
+per la mappatura dettagliata di PLC come SLAVE utilizzare il sito ufficiale
+
+https://www.openplcproject.com/reference/
+
+
+

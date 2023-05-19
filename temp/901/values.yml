@@ -1,0 +1,26 @@
+- aiv_robot.eth0:
+  - 901.1.1.2
+  - 901.1.1.4
+  plc1.eth0:
+  - 901.1.1.3
+  - 901.1.1.4
+  mtu-hmi.eth0:
+  - 901.1.2.2
+  - 901.1.2.3
+  logstash.eth0:
+  - 901.1.3.2
+  - 901.1.3.3
+  router-gw.eth0:
+  - 901.1.1.4
+  router-gw.eth1:
+  - 901.1.2.3
+  router-gw.eth2:
+  - 901.1.3.3
+- - aiv_robot
+  - mtu-hmi
+  - plc1
+  - router-gw
+- logstash
+- 901
+- /home/ubuntu/virtualTestbed/temp/901
+- /home/ubuntu/virtualTestbed

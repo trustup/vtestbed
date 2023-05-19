@@ -1,0 +1,109 @@
+SOLO QUANDO NEL TESTBED SI ABILITA L'INVIO DI DATI SU KAFKA
+aprire il terminale
+sudo su
+echo 1 > /proc/sys/net/ipv4/conf/wlo1/proxy_arp
+echo 1 > /proc/sys/net/ipv4/conf/virbr1/proxy_arp
+
+(file .py presenti in /home/ubuntu/virtualTestbed/project/ )
+per avviare uno scenario: 
+python3 start_scenario.py /percorso/file.yaml
+se sono presenti plc, i relativi codice.st devono essere posizionati nella cartella:
+../models/nome_modello/other_files
+
+per chiudere, riavviare, distruggere gli scenari:
+python3 close_scenario.py cyberrangeID(es.90)
+python3 restart_scenario.py cyberrangeID
+python3 destroy_scenario.py cyberrangeID
+
+(credenziali per tutte le VM: shadow)
+Dopo la creazione di uno scenario, collegarsi a KVM ed aprire ad esempio la macchina MTU, aprire il browser e collegarsi a scadaBR per vedere il modello in esecuzione (localhost:8080/ScadaBR/login )
+oppure aprire la macchina plc, andare su localhost:8080/login, credenziali: openplc - openplc. Qui è possibile vedere quale file .st è in esecuzione(sezione Programs), oppure in "Monitoring", osservare i registri e i valori controllati dal plc
+
+
+##########################################################################################################
+STRUTTURA DIRECTORY VIRTUAL TESTBED
+	- cartella cyris: contiene i file sorgenti di cyris (modificati rispetto agli originali) - cartella images(le base vm) - file COONFIG (contiene i percorsi) - cartella cyber_range (ovvero le istanze delle vm dello scenario)
+	- cartella project: contiene file e script python necessari al virtualTestbed
+	- cartella temp: all'interno viene generata una sottocartella relativa ad ogni scenario creato (si cancella eseguendo il destroy_scenario)
+	- cartella models: 
+		- generic.png (img di prova passata a scadaBr se non ne viene fornita una custom)
+		- cartella matlab
+		- cartella openmodelica
+
+##########################################################################################################
+MODELLI
+i modelli vanno caricati in /home/ubuntu/virtualTestbed/models mettendoli, a seconda del simulatore utilizzato, nella cartella MATLAB o OPENMODELICA
+
+OPENMODELICA
+la struttura deve essere, nel caso di OPENMODELICA:
+	- sottocartella col nome del modello (es "tankmodel_plc" )
+		-  archivio tar col nome del modello (es "tankmodel_plc.tar.gz)
+		SE PRESENTE UN PLC:
+			- sottocartella "other_files" contenente
+				- codice .st del plc (da programmare)
+		- immagine del modello col nome del modello (es tankmodel_plc.png) (opzionale, se non presente viene caricata un'immagine di default)
+
+per creare un modello su openmodelica, utilizzare l'editor OMEDIT, 
+cliccare sul modello e premere "simulation setup" 
+impostare la durata della simulazione (stop time, es 1000sec)
+impostare gli intervalli di campionamento dei valori (es ogni 0,5 sec) (più è piccolo l'intervallo, meglio vedo la simulazione su scadabr)
+spuntare "simulate" e "ok"
+andare nel percorso /tmp/OMEdit/"nome_modello"/
+prendere tutti i file presenti e racchiuderli in un'archivio "nome_modello".tar.gz
+copiare l'archivio in /home/ubuntu/virtualTestbed/models/openmodelica/"nome_modello"/
+
+MATLAB
+la struttura deve essere, nel caso di MATLAB:
+	- sottocartella col nome del modello (es "aiv_robot" )
+		- nome_modello.exe (generato da MATLAB)
+		SE PRESENTE UN PLC:
+			- sottocartella "other_files" contenente
+				- codice .st del plc (da programmare)
+				- OPZIONALI altri file opzionali, creati per personalizzare meglio la grafica di alcune demo. Da caricare manualmente.
+		- immagine del modello col nome del modello (es aiv_robot.png) (opzionale, se non presente viene caricata un'immagine di default)
+
+Per matlab va prima creato il modello e poi esportato. il file eseguibile sarà avviabile dalla runtime che non richiede licenza. NB se l'eseguibile l'ho generato su windows x86, allora funzionerà solo con la relativa runtime su windows x86 (deve essere stesso sistema e stessa architettura). Un esempio di sorgente per creare un modello è contenuto in /home/ubuntu/virtualTestbed/models/matlab/aiv_robot/sorgenti_matlab
+
+
+##########################################################################################################
+spiegazione flusso: 
+
+con il comando "python3 start_scenario.py file.yaml", il contenuto di file.yaml viene passato al file "yaml_converter.py" che ritorna dei valori da passare a "start_scenario_auto.py" che, tramite il comando OS, avvia cyris e passa i file di configurazione.
+La parte centrale del testbed è yaml_converter.py che esegue tutti gli automatismi. 
+
+Nel dettaglio, yaml_converter.py, genera per ogni file.yaml di input, i seguenti file:
+
+	- file "cyberrrange.yaml" in /home/ubuntu/virtualTestbed/cyris/examples/ - file parserizzato che serve a cyris per avviare lo scenario
+	- Una cartella in: /home/ubuntu/virtualTestbed/temp rinominata col numero di ID scelto per lo scenario. La cartella contiene all'interno:
+		- script.sh (file di script caricato sulla macchina che esegue il processo simulato. Avvia il simulatore e opc_modbus.py)
+		- modbus.py & opc_modbus.py (file caricati sulla macchina che esegue il processo, servono a leggere i dati OPC generati dal simulatore e  inviarli, tramite modbus, alla macchina RTU - se presente - oppure alla macchina MTU su cui gira SCADABR)
+		- data.json (file con tutta la configurazione del processo da passare a SCADABR)		
+		- script_selenium.py (caricato sulla macchina MTU, carica il file data.json in scadaBR simulando l'apertura del browser e l'upload tramite GUI)
+		- script_after_clone.sh (esegue tutte le copie e le configurazioni necessarie sulle vm)		
+		- script_after_clone_restart.sh (come prima ma solo per il restart)
+
+		SE PRESENTE UN PLC:
+		- cartella PLC contenente sottocartella "1" che include
+			- "file.st"(file di programmazione del PLC, NON GENERATO IN MODO AUTOMATICO - DEVE ESSERE PRECARICATO IN ../models/nome_modello/other_files" 
+			- "mbconfig.cfg" per associare registri plc agli attuatori del modello
+		- script_selenium_plc.py (caricato sulla macchina plc, carica i file precedenti in openplc, simulando azioni sulla gui)
+		- script_selenium_plc_restart.py (come prima ma solo per la fase di restart)
+
+		SE PRESENTE EXPORT DATA VIENE CREATA UNA VM che pubblica i dati su kafka prendendo come sorgenti le vm indicate nel file.yaml e vengono generati:
+		- filebeat_vm_sorgente.yaml (tanti quanto sono le vm indicate nel file.yaml, configura in automatico la lettura da filebeat)
+		- setting.conf (legge da filebeat e invia a kafka)
+		- kafka_consumer.py (in ascolto su un topic kafka ed effettua azioni sulle vms)
+
+
+##########################################################################################################
+BASE VM
+le base vm sono posizionate in /home/ubuntu/virtualTestbed/cyris/images
+e sono nel formato image_nome e image_nome.xml
+
+funzionanti
+image_ubuntu: sulla base vm ubuntu è presente OPENMODELICA, SCADABR, OPENPLC, FILEBEAT, attivati in base alle configurazioni scelte nel file.yaml
+image_windows7_matlab: sulla base vm windows è presente la runtime di MATLAB
+image_kali
+
+
+

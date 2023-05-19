@@ -1,0 +1,81 @@
+/tmp/OpenModelica_ubuntu/OMEdit/tnk2/tnk2 -port=34867 -logFormat=xmltcp -override=startTime=0,stopTime=800,stepSize=1.6,tolerance=1e-6,solver=dassl,outputFormat=mat,variableFilter=.* -r=/tmp/OpenModelica_ubuntu/OMEdit/tnk2/tnk2_res.mat -w -lv=LOG_STATS -inputPath=/tmp/OpenModelica_ubuntu/OMEdit/tnk2 -outputPath=/tmp/OpenModelica_ubuntu/OMEdit/tnk2
+The initialization finished successfully without homotopy method.
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+### STATISTICS ###
+timer
+  0.00481852s          reading init.xml
+ 0.000657793s          reading info.xml
+ 0.000241807s [  0.8%] pre-initialization
+ 0.000179601s [  0.6%] initialization
+  8.5489e-05s [  0.3%] steps
+  0.00068133s [  2.1%] solver (excl. callbacks)
+  0.00133794s [  4.2%] creating output-file
+   0.0112665s [ 35.4%] event-handling
+ 0.000672184s [  2.1%] overhead
+   0.0173304s [ 54.5%] simulation
+   0.0317952s [100.0%] total
+events
+    4 state events
+    0 time events
+solver: dassl
+  139 steps taken
+  185 calls of functionODE
+   96 evaluations of jacobian
+    6 error test failures
+    0 convergence test failures
+0.00272766s time of jacobian evaluation
+The simulation finished successfully.

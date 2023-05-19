@@ -1,0 +1,26 @@
+- aiv_robot.eth0:
+  - 300.1.1.2
+  - 300.1.1.4
+  plc1.eth0:
+  - 300.1.1.3
+  - 300.1.1.4
+  mtu-hmi.eth0:
+  - 300.1.2.2
+  - 300.1.2.3
+  logstash.eth0:
+  - 300.1.3.2
+  - 300.1.3.3
+  router-gw.eth0:
+  - 300.1.1.4
+  router-gw.eth1:
+  - 300.1.2.3
+  router-gw.eth2:
+  - 300.1.3.3
+- - aiv_robot
+  - mtu-hmi
+  - plc1
+  - router-gw
+- logstash
+- 300
+- /home/ubuntu/virtualTestbed/temp/300
+- /home/ubuntu/virtualTestbed

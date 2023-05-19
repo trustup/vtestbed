@@ -1,0 +1,87 @@
+il testbed sta su una rete virtuale, quindi su ogni vm da cui si vogliono estrarre dati bisonerebbe scrivere un producer e inviare i dati sul server kafka, di conseguenza ogni vm dovrebbe poter accedere alla rete esterna al testbed (poichè il server kafka è all'esterno del testbed)
+un modo più conveniente è utilizzare una sola vm che funge da hub, che raccoglie da tutte le vm ed ha anche un'interfaccia per comunicare con l'esterno e quidni con kafka.
+
+Per questo utilizzo il software LOGSTASH
+questo software può ricevere vari input, eventualemente processarli, e redirigerli su vari output
+per avviare logstash:
+scaricare e estrarre il pacchetto logstash dal sito ufficiale
+impostare $JAVA_HOME
+per farlo: export JAVA_HOME=...percorso/java
+(su ubuntu il percorso è /usr/lib/jvm/versioni_java quindi: export JAVA_HOME=/usr/lib/jvm/java-8.... )
+avviarlo con:
+/bin/logstash -f config/configurazione.conf
+
+INSTALLAZIONE LOGSTASH - METODO 2
+un altro modo per l'installazione è scaricare il file logstash.deb dal sito ufficiale e decomprimerlo
+sudo dpkg -i logstash.deb
+vengono quindi create delle cartelle nel sistema
+i file di configurazione vanno messi nella cartella /etc/logstash/conf.d/
+(poi nel file /etc/logstash/logstash.yaml ho levato il commento alla pipeline: main, ma non so se è necessario)
+per avviare logstash basta quindi
+>> systemctl start logstash.service
+per verificare che tutto funzioni bene è possibile lanciare manualmente logstash per verificare gli eventuali errori: sudo /usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/file.conf
+
+
+all'nterno del file .conf vengono specificati gli input, il processamento dei dati e l'output
+esempio:
+input { stdin {} }
+significa che leggo quello che scrivo nel terminale
+input { tcp {port => 8999} }
+leggo da connessione tcp su porto 8999
+input { beats { port => 5044 }}
+leggo da firebeat, porto 5044
+
+ovviamente è possibile averne altri e anche usarli insieme
+input { stdin{} tcp{} ...}
+
+per l'output vale lo stesso ragionamento
+output { stdout{} }
+scrive sulla console
+output { kafka {
+bootstrap_servers => "192.x.x.x:0000"
+codec => json
+topic_id => "prova"
+} }
+questo scrive su kafka, dove specifico l'indirizzo, il formato e il topic
+
+oltre input e output c'è anche filter (cioè il processarmento dei dati) che per il momento escludo
+
+a questo punto logstash è in ascolto e appena riceve l'input applica il filtro e scrive nell'output
+esistono anche altre opzioni, vedere esempio file passato via skype
+
+resta quindi da definire la sorgente dei dati, se voglio monitorare un file di log potrei ad esempio utilizzare la funzione tail:
+while true
+do
+tail -n0 -F source.log | nc 192.168.112.129 8999
+done
+
+esempio prendo l'ultima riga (-n0) del file source.log
+e la invio via nc a logstash (dove devo aver definito un input di tipo tcp su porta 8999)
+il comando -F esegue questo controllo in real time, ovvero ogni volta che ho una nuova riga, la prendo e la invio
+
+altra soluzione è utilizzare filebeat
+bisogna scaricarlo con
+curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.8.0-amd64.deb
+sudo dpkg -i filebeat-7.8.0-amd64.deb
+
+e avviarlo con
+service filebeat start
+per configurarlo bisogna andare nel file config contenuto in /etc/filebeat
+(il percorso dei file inerenti a filebeat lo trovo sul sito ufficiale:
+https://www.elastic.co/guide/en/beats/filebeat/current/directory-layout.html)
+aprendo il file posso impostare il path dei log da leggere:
+paths:
+-var/log/auth.log
+l'output di filebeat, nel mio caso logstash (avendo in logstash definito un input beats {})
+output.logstash:
+host: ["ip_logstash:porta"]
+commentando gli altri output contenuti nel file
+
+avviando service filebeat start
+verranno inviati i log al logstash ogni volta che c'è una variazione nel file (e logstash rimanda i file in topic a kafka)
+
+NOTA: il file di configurazione di logstash potrebbe essere protetto e quindi filebeat nn si avvia
+scrivere quindi:
+sudo chmod 777 /percorso_file_config.yaml
+sudo chmod go-w /percorso_file_config.yaml
+

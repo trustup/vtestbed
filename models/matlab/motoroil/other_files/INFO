@@ -1,0 +1,3 @@
+per caricare la grafica personalizzata per l'hmi:
+copiare le 2 immagini supplementari, 2.png 3.png in: /var/lib/tomcat7/webapps/ScadaBR/uploads/
+copiare il contenuto di data2.json in scadaBR (sezione import)

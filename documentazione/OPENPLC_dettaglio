@@ -1,0 +1,47 @@
+la cartella di installazione sarà in /bin/cyberrange
+
+git clone https://github.com/thiagoralves/OpenPLC_v3.git
+
+viene creata la cartella OpenPLC_v3, bisogna dare i permessi:
+chmod -R 777 /OpenPLC_v3
+
+per l'installazione
+cd OpenPLC_v3
+./install.sh linux
+
+per l'avvio:
+./start_openplc.sh
+
+una volta avviato rimane sempre up, anche al riavvio.
+per abilitare disabilitare openplc all'avvio
+
+systemctl enable openplc
+systemctl start openplc
+
+systemctl stop openplc
+systemctl disable openplc
+
+################################################################################################################################
+dal testbed vengono caricati:
+mdbconfig.cfg nella cartella OpenPLC_v3/webserver
+file.st in /home/ubuntu
+script_selenium_plc.py
+script_selenium_plc_restart.py
+
+bisogna avviare il py, il file st viene automaticamente caricato nel plc e viene fatto lo START
+al riavvio il server è ancora UP, inizialmente lo script selenium abilitava anche il running automatico al riavvio quindi ogni volta che si avviava la macchina plc era tutto operativo. Questa opzione ha però un bug:
+al riavvio andando nella sezione "monitoring" di openplc non viene visualizzato niente, nonostante sia cmq funzionante. Probabilmente il problema è dovuto al fatto che i dispositivi di SLAVE     li passo attraverso il file mbconfig, non mettendoli manuale attraverso l'interfaccia grafica, quindi quando si sceglie l'opzione di riavvio automatico, viene fatto un save nel file mbconfig contenente lo stato degli slave (che non ci sono) e quindi il file mbconfig viene sovrascritto con valori nulli.
+questo comportamento viene aggirato se invece di fare il riavvio automatico, ogni volta che si riavvia la macchina openplc, viene di nuovo caricata la pagina web openplc e premuto su start (mbconfig non viene sovrascritto e rimane quello passato dal testbed)
+per questo motivo utilizzo quindi 2 script: quello da fare al primo avvio delle macchine e quello "restart" che ripreme il tasto start ad ogni riavvio della macchina virtuale
+
+
+NOTA:
+se si cancellano i file .st nella cartella del plc e uno di questi era impostato come programma di default, il server non si avvia più e bisogna rifare l'isntall, quindi per cancellare un file:
+1) cancellarlo dall'interfaccia web di openplc
+2) lanciare e quindi far compilare il programma black
+3) cancellare i file dalla cartella
+quindi il programma di default torna blank e il server continua a funzionare
+
+
+
+

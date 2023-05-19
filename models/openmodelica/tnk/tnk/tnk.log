@@ -1,0 +1,87 @@
+/tmp/OpenModelica_ubuntu/OMEdit/tnk/tnk -port=46743 -logFormat=xmltcp -override=startTime=0,stopTime=500,stepSize=1,tolerance=1e-6,solver=dassl,outputFormat=mat,variableFilter=.* -r=/tmp/OpenModelica_ubuntu/OMEdit/tnk/tnk_res.mat -w -lv=LOG_STATS -inputPath=/tmp/OpenModelica_ubuntu/OMEdit/tnk -outputPath=/tmp/OpenModelica_ubuntu/OMEdit/tnk
+The initialization finished successfully without homotopy method.
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+The following assertion has been violated at time 426.000000
+openTank.level <= openTank.fluidLevel_max
+Vessel is overflowing (fluidLevel > fluidLevel_max = 10.035)
+Integrator attempt to handle a problem with a called assert.
+The following assertion has been violated at time 425.500000
+openTank.level <= openTank.fluidLevel_max
+Vessel is overflowing (fluidLevel > fluidLevel_max = 10.0156)
+model terminate | Simulation terminated by an assert at time: 425.5
+### STATISTICS ###
+timer
+  0.00381005s          reading init.xml
+ 0.000597527s          reading info.xml
+ 0.000210689s [  1.0%] pre-initialization
+ 0.000189242s [  0.9%] initialization
+           0s [  0.0%] steps
+ 0.000479993s [  2.3%] solver (excl. callbacks)
+  0.00098608s [  4.6%] creating output-file
+  0.00539662s [ 25.4%] event-handling
+ 0.000809164s [  3.8%] overhead
+   0.0131632s [ 62.0%] simulation
+    0.021235s [100.0%] total
+events
+    3 state events
+    0 time events
+solver: dassl
+   95 steps taken
+  135 calls of functionODE
+   79 evaluations of jacobian
+    7 error test failures
+    0 convergence test failures
+0.00233006s time of jacobian evaluation
+Simulation process failed. Exited with code 255.

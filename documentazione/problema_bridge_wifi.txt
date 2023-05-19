@@ -1,0 +1,34 @@
+KVM non supporta il bridge per schede di rete wireless.
+SOLUZIONE
+
+aprire KVM VIrtual Machine Manager
+andare in Modifica - Dettagli connessione
+"qui bisogna creare una sottorete della rete normalmente utilizzata"
+cliccare su "+"
+mettere un nome qualsiasi es. proxyArp e andare avanti
+accertarsi che "abilitare la definizione dello spazio di indirizzo di rete ipv4" e "abilita dhcpv4" siano abilitati
+come rete mettere: 192.168.1.160/27
+di conseguenza il range sarà da 192.168.1.176 - 192.168.1.190
+cliccare su avanti SENZA spuntare la parte relativa a ipv6
+spuntare "Forwarding alla rete fisica"
+come destinazione impostare la scheda wireless (nel mio caso dispositivo fisico wlo1)
+come modo scegliere "routed"
+lasciare le altre cose invariate e cliccare su fine
+
+verificare che la rete funzioni correttamente navigando su internet
+digitando ifconfig dovrebbero uscire
+wlo1 : scheda di rete wireless
+virbr0: rete di kvm
+virb1 : rete appena creata
+
+adesso bisogna abilitare il proxy, loggarsi quindi come root (comando: su) e digitare
+echo 1 > /proc/sys/net/ipv4/conf/wlo1/proxy_arp  
+echo 1 > /proc/sys/net/ipv4/conf/virbr1/proxy_arp
+
+dove wlo1 è il nome dell'interfaccia di rete wireless
+e virbr1 è quella subnet appena creata, NON il nome che era proxyArp ma il nome dispositivo(che si vede da ifconfig)
+
+RIFERIMENTI:
+https://unix.stackexchange.com/questions/159191/setup-kvm-on-a-wireless-interface-on-a-laptop-machine
+https://specman1.wordpress.com/2014/01/02/wireless-bridging-virtual-machines-kvm/
+

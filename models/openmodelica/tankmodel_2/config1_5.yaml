@@ -1,0 +1,80 @@
+MODEL:
+ modeler: openmodelica
+ name: tankmodel_2
+ os: ubuntu
+ interface: modbus
+ opc_parameters:
+  actuators: input1=0.6, input2=0.1, input3=0.5, PLC=0.0, on=1.0 #format actuators=> name=value, name=value, etc
+  sensors: mainTank.V, secondaryTank.V, velocityTank2, massOverflow, pressure1     #format sensors=> name, name, etc. 
+
+MTU:
+ name: mtu-hmi
+ os: ubuntu
+ hmi: scadabr
+ set_alert: #optional, only for scadabr hmi. Type Supported: high_limit, low_limit, change, no_change
+  type: high_limit
+  variable: secondaryTank.V > 60
+
+RTU: 
+ name: 
+ os: 
+ input:
+
+PLC:
+ name: plc1
+ os: ubuntu
+ input: pressure1
+ output_slave: PLC
+ plc_code: double_control.st #1 input, 1 output_slave, 1 output_master - TYPE=threshold control
+    
+    
+GENERIC:
+ name: 
+ os: 
+
+ROUTER_FIREWALL:
+ name: router-gw
+ os: ubuntu
+ forwarding:
+ - rules:
+   - rule: src=internal_2 dst=internal_1
+   - rule: src=internal_1 dst=internal_2
+
+
+NETWORKS:
+ name: internal_1; internal_2
+ members: tankmodel_2,plc1; mtu-hmi
+ gateway: router-gw; router-gw
+  
+
+CONFIG:
+ entry_point: mtu-hmi
+ cyber_range_id: 50
+ path: /home/ubuntu/virtualTestbed #path cyris directory
+ ip_host: 192.168.1.69
+
+
+SECURITY: # (optional) - Fix supported: ssh_root_deny
+ vulnerability: ssh_root_deny
+ target: router-gw
+
+
+EXPORT_DATA: #TO KAFKA (optional)
+ name: logstash
+ ip_server: 192.168.1.179 #address ip kafka server
+ read_topic: testbed  #enable reading from kafka to perform actions on vms
+ public_to_kafka: #enable reading data from vms to kafka (separate element with "," ) - for enabling fill "topic"
+  topic: stapp
+  source_data: plc1; mtu-hmi
+  log_type: login; login, tomcat #(element for same vm "," #element for different vm ";" )
+
+
+#EXPORT_DATA: #TO KAFKA (optional)
+# name: logstash
+# ip_server: 192.168.1.188 #address ip kafka server
+# source_data: mtu-hmi, tankmodel   #separate element with ","
+# log_type: login, tomcat; login #element for same vm "," -- element for different vm ";"
+ 
+
+
+

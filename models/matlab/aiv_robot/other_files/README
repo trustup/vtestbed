@@ -1,0 +1,5 @@
+to load custom HMI for aiv_robot model:
+
+copy (as root) "aiv2.png" "aiv_small.png" to the "/var/lib/tomcat7/webapps/ScadaBR/uploads/" on the MTU-HMI vm
+
+import "robot.json" into ScadaBR on the MTU-HMI vm

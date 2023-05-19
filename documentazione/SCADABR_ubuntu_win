@@ -1,0 +1,206 @@
+NOTA::: LA GUIDA è VALIDA SIA PER TOMCAT8 che TOMCAT7, con la versione 8 però c'è un bug sul caricamento di alcune icone nella sezione "graphic views" (es se voglio usare un binary graphics non carica la lista delle icone disponibili)
+
+
+sudo apt-get update
+
+>>Install mariadb server. (A database server for mysql)
+
+sudo apt-get install mariadb-server
+
+>>Open the database.
+
+sudo mysql -p
+
+>>Press Enter
+
+>>Create a sql database for ScadaBR.
+
+create database scadabr;
+
+>>Create username and password for ScadaBR database.
+
+CREATE USER 'scadabr' IDENTIFIED BY 'scadabr';
+
+>>Give username admin rights to database.
+
+GRANT ALL PRIVILEGES ON scadabr. * TO scadabr;
+
+>>Exit mariadb.
+
+quit;
+
+>>Install java8.
+
+sudo apt install default-jdk
+
+>>Install tomcat7.
+
+sudo apt-get install tomcat7
+
+>>Install Lib rxtx for java.
+
+sudo apt-get install librxtx-java
+
+>>Stop tomcat7 service.
+
+sudo service tomcat7 stop
+
+>>Change to the Webapps folder in tomcat7.
+
+cd /var/lib/tomcat7/webapps
+
+>>Download the ScadaBR.war file from ScadaBR sourceforge curent version im using for install is ScadaBR 0.9.1 to the >>tomcat7 webapps folder.
+
+sudo wget https://sourceforge.net/projects/scadabr/files/Software/WAR/ScadaBR%200.9.1/ScadaBR.war
+
+>>Start tomcat7 to deploy war file.
+
+sudo service tomcat7 start
+
+>>Stop tomcat7 to edit ScadaBR files.
+
+sudo service tomcat7 stop
+
+>>Delete ScadaBR war file
+
+sudo rm /var/lib/tomcat7/webapps/ScadaBR.war
+
+>>Create a bin folder in tomcat7.
+
+sudo mkdir /var/lib/tomcat7/bin
+
+>>Change the owner of tomcat7 folder from root to tomcat7.
+
+sudo chown -R tomcat7.tomcat7 /var/lib/tomcat7/
+sudo chown -R tomcat7.tomcat7 /var/lib/tomcat7/bin
+
+>>Change user tomcat7 to dialout group.
+
+sudo gpasswd -a tomcat7 dialout
+
+>>Edit the env.properties file to point to your database.
+
+sudo gedit /var/lib/tomcat7/webapps/ScadaBR/WEB-INF/classes/env.properties
+
+>>Uncomment the db.mysql section by removeing the # and adding your database username and password we created at start.
+
+Change this
+#db.type=mysql
+#db.url=jdbc:mysql://localhost/scadabr
+#db.username=root
+#db.password=
+#db.pool.maxActive=10
+#db.pool.maxIdle=10
+To This
+db.type=mysql
+db.url=jdbc:mysql://localhost/scadabr
+db.username=scadabr
+db.password=scadabr
+db.pool.maxActive=10
+db.pool.maxIdle=10
+
+Comment the db.derby and the convert.db out by adding # in the front.
+
+Change this
+db.type=derby
+db.url=~/../../bin/scadabrDB
+db.username=
+db.password=
+convert.db.type=
+convert.db.url=
+convert.db.username=
+convert.db.password=
+To This
+#db.type=derby
+#db.url=~/../../bin/scadabrDB
+#db.username=
+#db.password=
+#convert.db.type=
+#convert.db.url=
+#convert.db.username=
+#convert.db.password=
+
+>>Save the file.
+
+
+>>Update your sql table creater file syntax type=InnoDB; to the new mysql syntax engine=InnoDB; in file createTables->>mysql.sql
+
+sudo gedit /var/lib/tomcat7/webapps/ScadaBR/WEB-INF/db/createTables-mysql.sql
+
+>>Replace type=InnoDB; to engine=InnoDB;
+
+Ctrl + h
+
+>>Type what you want to replace. This is case sensitive.
+
+type=InnoDB;
+
+>>Type what you want to replace it with. This is also case sensitive.
+
+engine=InnoDB;
+
+>>replace all and save
+
+>>Start tomcat7.
+
+sudo service tomcat7 start
+
+>>in your web browser type your ip and port 8080 the tomcat7 server is on. In my case its on a local network so i will >>use this.
+
+http://yourlocal or public ip here:8080/ScadaBR
+
+If you left default loging you will log in using:
+admin
+admin
+
+
+
+INSTALLARE GUI FOR MARIADB
+wget -c https://dbeaver.io/files/dbeaver-ce_latest_i386.deb
+sudo dpkg -i dbeaver-ce_latest_i386.deb
+sudo apt-get install -f
+
+>>start program
+sudo dbeaver
+
+>>permission for access to db
+GRANT ALL PRIVILEGES *.* TO 'root'@'localhost' IDENTIFIED BY 'new_password'
+
+
+NOTA FONDAMENTALE: impostare la lingua delle vm in inglese, altrimenti scadabr non funziona bene
+
+CAMBIO PASSWORD:
+pass admin - $admin$
+pass user - $userSBR
+
+
+GUIDA SCADABR SU WINDOWS!
+>impostare windows e firefox in lingua inglese
+>installare java, versione pacchetto 32bit: jre-6u45-windows-i586.exe   
+                                	64bit: jre-6u45-windows-x64.exe
+>Installare ScadaBR0.9.1, spuntare Host Manager e sceglere derby come database
+>aprire properties su computer - 'advanced system settings' - 'environment variables' - nel riquadro inferiore(system variable) cliccare su NEW e aggiungere queste 2:
+CATALINA_HOME C:\Program Files\ScadaBR
+JRE_HOME C:\Program Files\java\jre6
+
+>per poter accedere tramite browser avviare tomcat, via gui: start - ScadaBR - Configure Tomcat (come ADMIN) , qui è possibile stoppare e avviare e scegliere se avviarlo automaticamente, settare su MANUAL
+per l'avvio tramite cmd: per stopparlo lanciare shutdown.bat in C:\Program Files\ScadaBR\bin , per avviarlo ci sono 2 opzioni: startup.bat lo avvia ma si apre una shell separata, oppure: catalina.but run   per avviarlo nella stessa shell
+>se devo stoppare avviare tomcat via ssh la sintassi è questa:
+>STOP: ssh root@IP_WINDOWS 'cd "C:\Program Files\ScadaBR\bin" && shutdown.bat'
+>START: ssh root@IP_WINDOWS 'cd "C:\Program Files\ScadaBR\bin && catalina.bat run'
+non posso integrare in un unico comando a causa degli spazi nel percorso che vanno gestiti con "", quindi mi sposto prima nella cartella, con && attendo la fine del comando, e poi eseguo il bat
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+

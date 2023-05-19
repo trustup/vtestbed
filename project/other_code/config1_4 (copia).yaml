@@ -1,0 +1,51 @@
+- MODEL:
+  modeler: openmodelica
+  name: controldc
+  interface: modbus
+  opc_parameters:
+     server: opc.tcp://baseimage:4841
+     run: 10001
+     actuators: #format:  name: address; value
+      u: ns=1 i=100000024; 1.0
+      L: ns=1 i=100000008; 1.0
+     sensors: #format: name: address
+      var1: ns=1 i=100000018
+      var2: ns=1 i=100000001
+      var3: ns=1 i=100000002
+
+- MTU:
+  name: Mtu_1 
+  hmi: scadabr
+
+- RTU:
+  name: 
+  os: 
+  
+- GENERIC:
+  name:
+  os:
+
+- FIREWALL:
+  name: firewall
+  os: ubuntu
+  forwarding:
+  - rules: 
+    - rule: src=internal_1 dst=internal_2 
+    - rule: src=internal_2 dst=internal_1 
+
+
+- NETWORKS:
+  name: internal_1;internal_2
+  members: controldc;Mtu_1
+  gateway: firewall; firewall
+  
+- CONFIG:
+  entry_point: Mtu_1
+  cyber_range_id: 123
+  path: /home/ubuntu #path cyris directory
+
+- TASKS:
+  install_package: 
+     name_package: 
+     manager_package: yum
+     target: rtuUNO

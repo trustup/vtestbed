@@ -1,0 +1,15 @@
+
+
+
+s1x = findNodeByName(ua,'75xi821bx');
+s1y = findNodeByName(ua,'75xi821by');
+s2x = findNodeByName(ua,'75xi822bx');
+s2y = findNodeByName(ua,'75xi822by');
+s3x = findNodeByName(ua,'75xi823bx');
+s3y = findNodeByName(ua,'75xi823by');
+s4x = findNodeByName(ua,'75xi824bx');
+s4y = findNodeByName(ua,'75xi824by');
+s5a = findNodeByName(ua,'75zi800ba');
+s5b = findNodeByName(ua,'75zi800bb');
+s6a = findNodeByName(ua,'75zi801ba');
+s6b = findNodeByName(ua,'75zi801bb');

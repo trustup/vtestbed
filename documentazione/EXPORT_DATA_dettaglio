@@ -1,0 +1,17 @@
+INFO FILE DI CONFIGURAZIONE
+
+EXPORT DATA:
+la sezione viene abilitata riempiendo il campo “name”
+sesi riempie solo “name” viene creata una macchina con doppia interfaccia di rete 
+le 2 funzioni supplementari sono
+-LETTURA DA UN TOPIC KAFKA, per eseguire azioni sulle vm a partire dai comandi letti nel topic. Per abilitare riempire il campo “read_topic”. In questo caso viene creato lo script: kafka_consumer.py che esegue un set predefinito di azioni - è necessario che nel topic di kafka ci sia un riferimento al nome della vm sulla quale voglio eseguire azioni: cioè se ho chiamato la macchina plc nello scenario come: plc1, è necessario che nel topic ci sia un campo con scritto plc1 per avere la corrispondenza
+-SCRITTURA DI LOG IN KAFKA. la sezione si abilita riempiendo “topic”
+topic riporta appunto il topic di output in cui verranno scritti i dati
+source_data: indica le macchine dalle quali leggere i log, separate dal “;”
+log_type: indica il tipo di log da leggere, per log della stessa macchina separare con “,” per log di macchine diverse separare con “;”
+esempio:  source_data: plc1; mtu-hmi  (2 vm da cui leggere dati)
+                log_type: login; login,scada (da plc1 leggo solo login, da mtu-hmi leggo login e scada)
+all’interno del codice i controlli vengono fatti su topic, se topic è riempito allora vado a vedere source_data e genero i relativi filebeat, indico alle vm di copiare i file filebeat, indico agli script afterclone di avviare filebeat
+genero inoltre il file setting.conf per logstash 
+
+

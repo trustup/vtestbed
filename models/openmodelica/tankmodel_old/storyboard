@@ -1,0 +1,11 @@
+The model has two tanks: mainTank, secondaryTank
+the mainTank fills through valve_1 and empties through valve_output, each of two phases takes 200sec
+
+During the emptying phase (valve 1 is closed - valve 2 is open) the flow of water is directed to the secondary tank until the MainTank is empty and begins to fill again (valve 1 open - valve 2 closed ) and the process starts again
+
+The secondaryTank has an overflow port if the water volume level exceeds 50m ^ 3
+
+The secondary tank fills at a speed of 0.05 m ^ 3 / sec
+the first emptying phase occurs at 280sec
+
+=> cause the overflow of tank2 after about 1200sec from the start of the simulation

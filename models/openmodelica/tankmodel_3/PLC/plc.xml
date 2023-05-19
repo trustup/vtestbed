@@ -1,0 +1,154 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project xmlns:ns1="http://www.plcopen.org/xml/tc6_0201" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.plcopen.org/xml/tc6_0201">
+  <fileHeader companyName="Sconosciuto" productName="Senza_nome" productVersion="1" creationDateTime="2021-09-08T11:48:45"/>
+  <contentHeader name="Senza_nome" modificationDateTime="2021-09-08T14:45:24">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="10" y="10"/>
+      </fbd>
+      <ld>
+        <scaling x="10" y="10"/>
+      </ld>
+      <sfc>
+        <scaling x="10" y="10"/>
+      </sfc>
+    </coordinateInfo>
+  </contentHeader>
+  <types>
+    <dataTypes/>
+    <pous>
+      <pou name="function1" pouType="function">
+        <interface>
+          <returnType>
+            <BOOL/>
+          </returnType>
+          <inputVars>
+            <variable name="LOWWORD">
+              <type>
+                <UINT/>
+              </type>
+            </variable>
+            <variable name="HIGHWORD">
+              <type>
+                <UINT/>
+              </type>
+            </variable>
+          </inputVars>
+          <outputVars>
+            <variable name="WORDSTOREAL">
+              <type>
+                <REAL/>
+              </type>
+            </variable>
+          </outputVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml:p><![CDATA[{{
+  union words_to_real {
+  uint16_t i[2];
+  float f;
+  }w2r;
+  w2r.i[0] = LOWWORD;
+  w2r.i[1] = HIGHWORD;
+  WORDSTOREAL = w2r.f;
+  }}]]></xhtml:p>
+          </ST>
+        </body>
+      </pou>
+      <pou name="function2" pouType="function">
+        <interface>
+          <returnType>
+            <BOOL/>
+          </returnType>
+          <inputVars>
+            <variable name="INPUT">
+              <type>
+                <REAL/>
+              </type>
+            </variable>
+          </inputVars>
+          <outputVars>
+            <variable name="LOWW">
+              <type>
+                <UINT/>
+              </type>
+            </variable>
+            <variable name="HIGG">
+              <type>
+                <UINT/>
+              </type>
+            </variable>
+          </outputVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml:p><![CDATA[{{
+  union real_to_words {
+  uint16_t i[2];
+  float f;
+  }r2w;
+  r2w.f = INPP;
+  LOWW = r2w.i[0];
+  HIGG = r2w.i[1];
+  }}]]></xhtml:p>
+          </ST>
+        </body>
+      </pou>
+      <pou name="control" pouType="functionBlock">
+        <interface>
+          <inputVars>
+            <variable name="PRESSURE">
+              <type>
+                <REAL/>
+              </type>
+            </variable>
+            <variable name="LOAD">
+              <type>
+                <REAL/>
+              </type>
+            </variable>
+          </inputVars>
+          <outputVars>
+            <variable name="controll">
+              <type>
+                <REAL/>
+              </type>
+            </variable>
+          </outputVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml:p><![CDATA[  IF (LOAD = 0.0) THEN
+    controll := 1.0;
+  ELSIF (PRESSURE<1.015 and LOAD = 1.0) THEN
+    controll := 0.0;
+  ELSIF (controll = 0.0 and PRESSURE<2.4 and LOAD = 1.0) THEN
+    controll := 0.0;
+  ELSIF (controll = 0.0 and PRESSURE>2.4 and LOAD = 1.0) THEN
+    controll := 1.0;
+  ELSIF (controll =1.0 and PRESSURE<2.4 and LOAD = 1.0) THEN
+    controll := 1.0;
+  END_IF; ]]></xhtml:p>
+          </ST>
+        </body>
+      </pou>
+      <pou name="plc_actions" pouType="program">
+        <body>
+          <FBD/>
+        </body>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations>
+      <configuration name="Config0">
+        <resource name="Res0">
+          <task name="task0" priority="0" interval="T#20ms">
+            <pouInstance name="instance0" typeName="double_control"/>
+          </task>
+        </resource>
+      </configuration>
+    </configurations>
+  </instances>
+</project>

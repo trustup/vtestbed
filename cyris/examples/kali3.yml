@@ -1,0 +1,39 @@
+---
+- host_settings:
+  - id: host_1
+    mgmt_addr: 192.168.1.68
+    virbr_addr: 192.168.122.1
+    account: ubuntu
+
+- guest_settings:
+  - id: ubuntu
+    basevm_host: host_1
+    basevm_config_file: /home/ubuntu/cyris/images/image_ubuntu.xml
+    basevm_type: kvm
+
+  - id: ubuntu2
+    basevm_host: host_1
+    basevm_config_file: /home/ubuntu/cyris/images/image_ubuntu.xml
+    basevm_type: kvm
+
+
+- clone_settings:
+  - range_id: 122
+    hosts:
+    - host_id: host_1
+      instance_number: 1
+      guests:
+      - guest_id: ubuntu
+        number: 1
+        entry_point: yes
+      - guest_id: ubuntu2
+        number: 1
+      topology:
+      - type: custom
+        networks:
+        - name: office
+          members: ubuntu.eth0, ubuntu2.eth0
+
+
+
+

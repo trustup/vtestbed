@@ -1,0 +1,216 @@
+/tmp/OpenModelica_ubuntu/OMEdit/tankmodel/tankmodel -port=34755 -logFormat=xmltcp -override=startTime=0,stopTime=500,stepSize=1,tolerance=1e-6,solver=dassl,outputFormat=mat,variableFilter=.* -r=/tmp/OpenModelica_ubuntu/OMEdit/tankmodel/tankmodel_res.mat -w -lv=LOG_STATS -inputPath=/tmp/OpenModelica_ubuntu/OMEdit/tankmodel -outputPath=/tmp/OpenModelica_ubuntu/OMEdit/tankmodel
+Matrix singular!
+The initialization finished successfully without homotopy method.
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+Matrix singular!
+### STATISTICS ###
+timer
+  0.00610249s          reading init.xml
+ 0.000838871s          reading info.xml
+ 0.000303315s [  0.7%] pre-initialization
+  0.00022728s [  0.5%] initialization
+  4.0243e-05s [  0.1%] steps
+ 0.000829782s [  2.0%] solver (excl. callbacks)
+  0.00164524s [  3.9%] creating output-file
+   0.0161006s [ 38.0%] event-handling
+ 0.000781449s [  1.8%] overhead
+   0.0224266s [ 52.9%] simulation
+   0.0423545s [100.0%] total
+events
+    7 state events
+    0 time events
+solver: dassl
+  200 steps taken
+  267 calls of functionODE
+  140 evaluations of jacobian
+    8 error test failures
+    0 convergence test failures
+0.00497439s time of jacobian evaluation
+The simulation finished successfully.

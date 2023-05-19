@@ -1,0 +1,21 @@
+{
+	"partner": "CINI",
+	"@timestamp": "2021-02-05T10:03:03.806Z",
+	"sourceId": "ST.APP.6.2",
+	"sipsElements": [{
+		"assetType": "cyber/virtualTestbed",
+		"elementType": "CP_Asset",
+		"id": "SCADA_plc1"
+	}],
+	"message": "Feb  5 11:03:01 plc1 pkexec: pam_unix(polkit-1:session): session opened for user root by (uid=1000)",
+	"version": "1.0",
+	"location": {
+		"impactRadius": "2",
+		"geometryType": "Point",
+		"coordinatePairs": ["51.83116", "-8.27483"]
+	},
+	"sipsId": "Pilot2",
+	"tags": ["login", "beats_input_codec_plain_applied"],
+	"id": "01d8ceaa-62ec-46db-9af8-d37cfe4e6c58",
+	"host": "plc1"
+}

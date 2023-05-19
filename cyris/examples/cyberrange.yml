@@ -1,0 +1,100 @@
+- host_settings:
+  - id: host_1
+    mgmt_addr: 10.113.9.123
+    virbr_addr: 192.168.122.1
+    account: ubuntu
+- guest_settings:
+  - id: tankmodel_plc
+    basevm_host: host_1
+    basevm_config_file: /home/ubuntu/virtualTestbed/cyris/images/image_ubuntu.xml
+    basevm_type: kvm
+    tasks:
+    - copy_content:
+      - src: /home/ubuntu/virtualTestbed/models/openmodelica/tankmodel_plc/tankmodel_plc.tar.gz
+        dst: /home/ubuntu/
+      - src: /home/ubuntu/virtualTestbed/temp/101/opc_modbus.py
+        dst: /home/ubuntu/
+      - src: /home/ubuntu/virtualTestbed/temp/101/modbus.py
+        dst: /home/ubuntu/
+      - src: /home/ubuntu/virtualTestbed/temp/101/script.sh
+        dst: /home/ubuntu/
+  - id: mtu-hmi
+    basevm_host: host_1
+    basevm_config_file: /home/ubuntu/virtualTestbed/cyris/images/image_ubuntu.xml
+    basevm_type: kvm
+    tasks:
+    - copy_content:
+      - src: /home/ubuntu/virtualTestbed/temp/101/data.json
+        dst: /home/ubuntu/
+      - src: /home/ubuntu/virtualTestbed/temp/101/script_selenium.py
+        dst: /home/ubuntu/
+      - src: /home/ubuntu/virtualTestbed/models/openmodelica/tankmodel_plc/tankmodel_plc.png
+        dst: /home/ubuntu/
+      - src: /home/ubuntu/virtualTestbed/temp/101/filebeat_mtu-hmi.yml
+        dst: /home/ubuntu/
+  - id: plc1
+    basevm_host: host_1
+    basevm_config_file: /home/ubuntu/virtualTestbed/cyris/images/image_ubuntu.xml
+    basevm_type: kvm
+    tasks:
+    - copy_content:
+      - src: /home/ubuntu/virtualTestbed/temp/101/PLC/1/mbconfig.cfg
+        dst: /bin/cyberrange/OpenPLC_v3/webserver
+      - src: /home/ubuntu/virtualTestbed/temp/101/PLC/1/double_control.st
+        dst: /home/ubuntu/
+      - src: /home/ubuntu/virtualTestbed/temp/101/script_selenium_plc1.py
+        dst: /home/ubuntu/
+      - src: /home/ubuntu/virtualTestbed/temp/101/script_selenium_plc1_restart.py
+        dst: /home/ubuntu/
+      - src: /home/ubuntu/virtualTestbed/temp/101/filebeat_plc1.yml
+        dst: /home/ubuntu/
+  - id: router-gw
+    basevm_host: host_1
+    basevm_config_file: /home/ubuntu/virtualTestbed/cyris/images/image_ubuntu.xml
+    basevm_type: kvm
+  - id: logstash
+    basevm_host: host_1
+    basevm_config_file: /home/ubuntu/virtualTestbed/cyris/images/image_ubuntu.xml
+    basevm_type: kvm
+    tasks:
+    - copy_content:
+      - src: /home/ubuntu/virtualTestbed/temp/101/setting.conf
+        dst: /etc/logstash/conf.d/
+      - src: /home/ubuntu/virtualTestbed/temp/101/kafka_consumer.py
+        dst: /home/ubuntu/
+- clone_settings:
+  - range_id: 101
+    hosts:
+    - host_id: host_1
+      instance_number: 1
+      guests:
+      - guest_id: tankmodel_plc
+        number: 1
+      - guest_id: mtu-hmi
+        number: 1
+        entry_point: true
+      - guest_id: plc1
+        number: 1
+      - guest_id: logstash
+        number: 1
+      - guest_id: router-gw
+        number: 1
+        forwarding_rules:
+        - rule: src=internal_2 dst=internal_1
+        - rule: src=internal_1 dst=internal_2
+        - rule: src=internal_1 dst=export
+        - rule: src=export dst=internal_1
+        - rule: src=internal_2 dst=export
+        - rule: src=export dst=internal_2
+      topology:
+      - type: custom
+        networks:
+        - name: internal_1
+          members: tankmodel_plc.eth0, plc1.eth0
+          gateway: router-gw.eth0
+        - name: internal_2
+          members: mtu-hmi.eth0
+          gateway: router-gw.eth1
+        - name: export
+          members: logstash.eth0
+          gateway: router-gw.eth2

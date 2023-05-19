@@ -1,0 +1,19 @@
+filebeat.inputs:
+
+- type: log
+  enabled: true
+  paths:
+    - /var/log/auth.log
+  tags: ["login"]
+
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enables: false
+
+setup.template.settings:
+  index.number_of_shards: 1
+
+setup.kibana:
+
+output.logstash:
+  hosts: ["50.1.3.2:5044"]

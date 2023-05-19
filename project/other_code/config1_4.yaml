@@ -1,0 +1,51 @@
+- MODEL:
+  modeler: openmodelica
+  name: tnk3
+  interface: modbus
+  opc_parameters:
+     server: opc.tcp://localhost:4841
+     run: 10001
+     actuators: #format:  name: address; value
+     sensors: #format: name: address
+      tank1.V: ns=1 i=150000030
+      openTank.V: ns=1 i=150000004
+
+- MTU:
+  name: Mtu_1 
+  hmi: scadabr
+
+- RTU: 
+  name: 
+  os: 
+  
+- GENERIC:
+  name: user
+  os: kali
+
+- FIREWALL:
+  name: firewall
+  os: ubuntu
+  forwarding:
+  - rules: 
+    - rule: src=internal_1 dst=internal_2 
+    - rule: src=internal_2 dst=internal_1
+    - rule: src=internal_3 dst=internal_2
+    - rule: src=internal_2 dst=internal_3
+
+
+
+- NETWORKS:
+  name: internal_1;internal_2;internal_3
+  members: tnk3;Mtu_1;user
+  gateway: firewall; firewall; firewall
+  
+- CONFIG:
+  entry_point: user
+  cyber_range_id: 123
+  path: /home/ubuntu #path cyris directory
+
+- TASKS:
+  install_package: 
+     name_package: 
+     manager_package: yum
+     target: rtuUNO

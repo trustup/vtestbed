@@ -1,0 +1,30 @@
+installare cyris in /home/ubuntu
+installare immagini disco in /home/ubuntu/images
+nell xml dell’immagine disco modificare il percorso relativo all’immagine disco
+nel file basic.yaml in /cyris/example modificare il percorso dell’xml, mettere IP della macchina HOST e nome account (ubuntu)
+modificare i percorsi nel file /cyris/config
+
+
+autenticazione senza password:
+sudo passwd root (mettere theroot come nuova password)
+sudo gedit /etc/ssh/sshd_config (cambiare PermitRootLOgin su yes)
+sudo gedit /etc/sudoers
+incollare alla fine del file: ubuntu ALL=(ALL) NOPASSWD:ALL
+
+installare qemu:
+sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virtinst virt-manager
+
+ssh:
+da ubuntu: ssh-keygen -t rsa
+ssh-copy-id root@localhost
+da root: ssh-keygen -t rsa
+ssh-copy-id ubuntu@localhost
+
+per ubuntu 20 installare pip per python2
+curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
+sudo python get-pip.py
+installare con pip gli eventuali moduli mancanti (es paramiko)
+
+installare host-prepare:
+sudo ../cyris/HOST_PREPARE.sh
+

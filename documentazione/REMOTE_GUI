@@ -1,0 +1,36 @@
+LANCIARE PROGRAMMI CON GUI IN MODO REMOTO USANDO SSH
+
+PER MACCHINE LINUX:
+
+ssh ubuntu@IP "DISPLAY=:0 programma_comando_da_lanciare"
+
+
+WINDOWS
+su windows bisogna prima installare il tool psexec, esempio supponendo di copiare psexec.exe nella cartella C:\CyberRange
+il comando è:
+
+ssh nome_utente@IP "C:\CyberRange\psexec -d nome_utente -p password -i 1 comando_programma_da_lanciare"
+
+esempio per una macchina con credenziali winuser - shadow su ip 192.168.122.92 il comando è:
+ssh winuser@192.168.122.92 "C:\CyberRange\psexec -d -u winuser -p shadow -i 1 C:\CyberRange\nav.exe"
+
+
+-i 1 significa che il programma deve essere lanciato con l'id sessione associato all'username winuser, che in questo caso è 1 
+per scoprire questo valore collegarsi ssh alla macchina windows e digitare qwinsta, comparirà l'id associato all'utente
+ssh winuser@192.168.122.92
+> qwinsta 
+RIFERIMENTO: https://superuser.com/questions/1273682/execute-command-script-in-windows-10-remotely-from-linux-machine
+
+
+
+UPDATE:::::
+il comando scritto sopra è valido se l'utente ha gia fatto il login sulla macchina, se i comandi vengono lanciati prima del login si vedrà -non appena l'utente si logga e accede al desktop- solo una finestra trasparente senza funzionare
+
+per questo il comando va modificato in questo modo, aggiungendo -s
+ssh winuser@192.168.122.92 "C:\CyberRange\psexec -u winuser -p shadow -d -s -i 1 C:\CyberRange\nav.exe"
+
+in questo modo anche loggandosi dopo aver lanciato i programmi si vede l'interfaccia grafica funzionare
+NOTA: se lo script che lancio contiene dei comandi python la console non riesce a trovare python nonostante sia settato il path nelle variabili di ambiente, sia per l'utente normale che per il root
+per risolvere basta indicare all'interno dello script il percorso intero di python es. C:\Users\winuser\AppData\.....python.exe
+NOTA2: con questa modalità sembra che ogni comando sia lanciato come root, nonostante venga esplicitato l'utente nel comando
+questo potrebbe portare problemi nello script opc_modbus.py ---VERIFICARE---

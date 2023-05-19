@@ -1,0 +1,58 @@
+---
+- host_settings:
+  - id: host_1
+    mgmt_addr: 192.168.1.65
+    virbr_addr: 192.168.122.1
+    account: ubuntu
+
+- guest_settings:
+  - id: hmi
+    basevm_host: host_1
+    basevm_config_file: /home/ubuntu/cyris/images/image_ubuntu.xml
+    basevm_type: kvm
+
+  - id: user
+    basevm_host: host_1
+    basevm_config_file: /home/ubuntu/cyris/images/image_kali.xml
+    basevm_type: kvm
+
+  - id: fw
+    basevm_host: host_1
+    basevm_config_file: /home/ubuntu/cyris/images/image_ubuntu.xml
+    basevm_type: kvm
+
+  - id: user2
+    basevm_host: host_1
+    basevm_config_file: /home/ubuntu/cyris/images/image_ubuntu.xml
+    basevm_type: kvm
+
+- clone_settings:
+  - range_id: 100
+    hosts:
+    - host_id: host_1
+      instance_number: 1
+      guests:
+      - guest_id: user
+        number: 1
+        entry_point: yes
+      - guest_id: user2
+        number: 1
+      - guest_id: hmi
+        number: 1
+      - guest_id: fw
+        number: 1
+        forwarding_rules:
+        - rule: src=internal_3,internal_2 dst=internal_1.user2
+        - rule: src=internal_3 dst=internal_2
+      topology:
+      - type: custom
+        networks:
+        - name: internal_1
+          members: user2.eth0
+          gateway: fw.eth0
+        - name: internal_2
+          members: hmi.eth0
+          gateway: fw.eth1
+        - name: internal_3
+          members: user.eth0
+          gateway: fw.eth2

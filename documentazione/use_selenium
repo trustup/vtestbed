@@ -1,0 +1,29 @@
+>> download geckodriver for the correct browser
+https://github.com/mozilla/geckodriver/releases/tag/v0.26.0
+>> extract the archive, the output will be: geckodriver
+sudo tar -xvf filename.tar.gz
+>> move the geckodriver file to usr/local/bin
+sudo mv path_geckodriver_file /usr/local/bin/
+>> move in the directory and make geckodriver executable
+cd /usr/local/bin
+sudo chmod +x geckodriver
+>> add this path (without sudo)
+export PATH=$PATH:/usr/local/bin/geckodriver
+
+INSTALL PIP
+>> xubuntu has python 3.5.2, for isntalling pip: 
+sudo apt-get install -y python3-pip
+>> install selenium
+pip3 install selenium
+>> for launch 
+python3 script_selenium.py
+>> NOTE: the script read a json data in position: /home/ubuntu/
+
+NOTA SELENIUM::: (SOLO PER VERSIONE 0.9)
+quando vengono caricati i valori modbus attraverso il modulo selenium, lo status data_sources è impostato su DISABLE
+aggiungo quindi il comando byID per trovare il bottone all'interno della pagina e cliccarlo
+il problema è che ogni volta viene generata la pagina di creazione questo id cambia:
+la prima volta è dsImg1 
+se cancello i valori e rieseguo selenium il valore sarà dsImg2 quindi il codice selenium non lo troverà
+tenere in conto quando scrivo il codice 
+
