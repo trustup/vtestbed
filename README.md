@@ -50,9 +50,7 @@ The virtual testbed integrates MATLAB Simulink and OpenModelica models to simula
 
 ### Prerequisites
 
-1. **MATLAB with Simulink**: Required for running AIV robot simulations.
-2. **OpenModelica**: Required for chemical storage simulations.
-3. **YAML Parser**: For loading scenario configurations.
+1. **VM Images**: please get in touch with us for this.
 
 ### Installation
 
@@ -72,7 +70,7 @@ The virtual testbed integrates MATLAB Simulink and OpenModelica models to simula
    Load the chosen configuration file, which sets up the testbed with parameters tailored to the selected scenario.
 
    ```bash
-   python3 ./start_scenario.py scenario_chemical.yaml
+   python3 ./project/start_scenario.py scenario_chemical.yaml
    ```
 
 ### Running Simulations
